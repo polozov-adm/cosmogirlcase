@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CosmoGirlCase</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌑</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: #000;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: starMove linear infinite;
+        }
+
+        @keyframes starMove {
+            from {
+                transform: translateZ(0) translateY(0);
+            }
+            to {
+                transform: translateZ(1000px) translateY(1000px);
+            }
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            padding: 2vh;
+            max-width: 90vw;
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s ease-in forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            animation-delay: 0.3s;
+        }
+
+        .ticker {
+            animation-delay: 0.6s;
+        }
+
+        .address-container {
+            animation-delay: 0.9s;
+        }
+
+        h1 {
+            font-size: min(10vw, 12vh, 102px); /* Адаптивный размер */
+            font-weight: 900;
+            color: white;
+            margin-bottom: 3vh;
+            line-height: 1.2;
+        }
+
+        .ticker {
+            font-size: min(3.5vw, 4vh, 32px); /* Адаптивный размер */
+            color: white;
+            margin-bottom: 3vh;
+            font-weight: bold;
+        }
+
+        .address-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: min(2.5vw, 2.5vh, 25px);
+            margin-top: 2.5vh;
+            flex-wrap: wrap;
+        }
+
+        .address {
+            font-size: min(2.2vw, 2.5vh, 20px); /* Адаптивный размер */
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            padding: min(1.2vh, 12px) min(2vw, 20px);
+            border-radius: min(1vh, 10px);
+            word-break: break-all;
+            max-width: 80vw;
+        }
+
+        .copy-btn {
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            cursor: pointer;
+            padding: min(1.2vh, 12px);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: min(1vh, 10px);
+            min-width: min(4vw, 4vh, 40px);
+            min-height: min(4vw, 4vh, 40px);
+        }
+
+        .copy-icon {
+            width: min(2.5vw, 2.5vh, 24px);
+            height: min(2.5vw, 2.5vh, 24px);
+            filter: invert(1);
+        }
+
+        .copy-btn:hover {
+            opacity: 0.8;
+        }
+
+        .copy-btn:active {
+            opacity: 0.6;
+        }
+
+        .copied {
+            animation: pulse 0.5s ease;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Медиа-запросы для очень маленьких экранов */
+        @media (max-width: 480px) {
+            .container {
+                padding: 1vh;
+                max-width: 95vw;
+            }
+
+            .address-container {
+                flex-direction: column;
+                gap: 2vh;
+            }
+
+            .address {
+                font-size: min(3vw, 3vh, 18px);
+                padding: 1.5vh 3vw;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="stars"></div>
+<div class="container">
+    <h1 class="fade-in">CosmoGirlCase</h1>
+    <div class="ticker fade-in">$CGC</div>
+    <div class="address-container fade-in">
+        <div class="address" id="address">123455432847</div>
+        <button class="copy-btn" onclick="copyAddress()">
+            <img src="https://cdn-icons-png.flaticon.com/512/4922/4922982.png" alt="Copy" class="copy-icon">
+        </button>
+    </div>
+</div>
+
+<script>
+    // Создание звезд
+    const starsContainer = document.getElementById('stars');
+    for (let i = 0; i < 200; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        const size = Math.random() * 3 + 1;
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        star.style.animationDelay = Math.random() * 5 + 's';
+        starsContainer.appendChild(star);
+    }
+
+    function copyAddress() {
+        const address = document.getElementById('address').textContent;
+        const btn = document.querySelector('.copy-btn');
+        const icon = btn.querySelector('.copy-icon');
+
+        // Создаем временный текстовый элемент
+        const textarea = document.createElement('textarea');
+        textarea.value = address;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+
+        try {
+            document.execCommand('copy');
+            btn.classList.add('copied');
+            icon.style.opacity = '0.5';
+
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                icon.style.opacity = '1';
+            }, 1000);
+        } catch (err) {
+            console.error('Ошибка копирования:', err);
+        } finally {
+            document.body.removeChild(textarea);
+        }
+    }
+
+    // Адаптация звезд при изменении размера окна
+    window.addEventListener('resize', function() {
+        // Звезды уже адаптивны, так как используют проценты
+    });
+</script>
+</body>
+</html>
